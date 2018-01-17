@@ -24,8 +24,8 @@
 				<div class="col-sm-6 col-md-3 appeared" style="padding-bottom: 15px">
 					<div class="thumbnail">
 						<img
-							src="<c:url value="/resource/images/products/${product.productId}.jpg"></c:url>"
-							alt="image" style="width: 100%" />
+							src="<c:url value="/resource/images/products/P${product.productId}.jpg"></c:url>"
+							alt="image" style="width: 100%; max-height: 300px;" />
 						<div class="caption">
 							<h3>${product.name}</h3>
 							<p>${product.description}</p>

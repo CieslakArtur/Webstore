@@ -19,7 +19,7 @@
 			<div class="col-sm-6 col-md-3 appeared" style="padding-bottom: 15px">
 				<div class="thumbnail">
 					<img
-						src="<c:url value="/resource/images/categories/${category.id}.jpg"></c:url>"
+						src="<c:url value="/resource/images/categories/Cat${category.id}.jpg"></c:url>"
 						alt="image" style="width: 200px; height: 120px;" />
 					<div class="caption">
 						<h3>${category.name}</h3>
@@ -30,9 +30,6 @@
 					</div>
 				</div>
 			</div>
-		</c:forEach>
-		<c:forEach items="${manufacturers}" var="manufacturer">
-		<h1>${manufacturer}</h1>
 		</c:forEach>
 	</div>
 </section>

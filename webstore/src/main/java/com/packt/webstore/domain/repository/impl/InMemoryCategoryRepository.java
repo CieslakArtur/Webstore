@@ -1,10 +1,14 @@
 package com.packt.webstore.domain.repository.impl;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
+import com.packt.webstore.databse.DatabaseConnector;
 import com.packt.webstore.domain.Category;
 import com.packt.webstore.domain.repository.CategoryRepository;
 import com.packt.webstore.exception.CategoryNotFoundException;
@@ -30,21 +34,51 @@ public class InMemoryCategoryRepository implements CategoryRepository{
 	
 	@Override
 	public List<Category> getAllCategories() {
-		return listOfCategories;
+			List<Category> list=new LinkedList<>();
+			DatabaseConnector conn=new DatabaseConnector();
+			StringBuilder sb=new StringBuilder();
+			sb.append("SELECT * FROM category");
+			conn.execute(sb.toString());
+			ResultSet rs=conn.getResultSet();
+			if(rs==null) {
+				return list;
+			}
+			Category category;
+			try {
+				while(rs.next()){
+					category=new Category(Integer.toString(rs.getInt("id")),rs.getString("name"));
+					category.setDescription(rs.getString("description"));
+					list.add(category);
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			conn.closeConnection();
+			sb.delete(0, sb.length());
+			return list;
 	}
 
 	@Override
 	public Category getCategoryById(String categoryId) {
-		Category categoryById=null;
-		for(Category category:listOfCategories) {
-			if(category!=null && category.getId()!=null && category.getId().equals(categoryId)) {
-				categoryById=category;
-				break;
+		DatabaseConnector conn=new DatabaseConnector();
+		StringBuilder sb=new StringBuilder();
+		sb.append("SELECT * FROM category WHERE id=").append(categoryId);
+		conn.execute(sb.toString());
+		ResultSet rs=conn.getResultSet();
+		Category category=null;
+		if(rs==null) {
+			return category;
+		}
+		try {
+			while(rs.next()){
+				category=new Category(Integer.toString(rs.getInt("id")),rs.getString("name"));
+				category.setDescription(rs.getString("description"));
 			}
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
-		if(categoryById==null) {
-			throw new CategoryNotFoundException(categoryId);
-		}
-		return categoryById;
+		conn.closeConnection();
+		sb.delete(0, sb.length());
+		return category;
 	}
 }

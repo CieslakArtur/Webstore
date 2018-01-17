@@ -19,7 +19,7 @@
 	<div class="container">
 		<div class="row">
 			<c:if test="${!error}">
-				<div class="col-md-4 col-md-offset-4 appeared">
+				<div class="col-md-4 col-md-offset-4 appeared" >
 			</c:if>
 			<c:if test="${error}">
 				<div class="col-md-4 col-md-offset-4">

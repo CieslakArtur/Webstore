@@ -26,7 +26,6 @@ public class CategoryController {
 	@RequestMapping("/categories")
 	public String list(Model model) {
 		model.addAttribute("categories",categoryService.getAllCategories());
-		model.addAttribute("manufacturers",getManufacturer());
 		return "categories";
 	}
 	
@@ -40,25 +39,5 @@ public class CategoryController {
 		mav.addObject("url",req.getRequestURL()+"?"+req.getQueryString());
 		mav.setViewName("productNotFound");
 		return mav;
-	}
-	
-	
-	public List<String> getManufacturer(){
-		List<String> list=new LinkedList<>();
-		DatabaseConnector conn=new DatabaseConnector();
-		StringBuilder sb=new StringBuilder();
-		sb.append("SELECT * FROM manufacturer");
-		conn.execute(sb.toString());
-		ResultSet rs=conn.getResultSet();
-		try {
-			while(rs.next()){
-				String manufacturer=rs.getString("name");
-				list.add(manufacturer);
-				System.out.println(manufacturer);
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return list;
 	}
 }
