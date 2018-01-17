@@ -13,18 +13,18 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 public class AuditingInterceptor extends HandlerInterceptorAdapter{
 	Logger logger=Logger.getLogger("auditLogger");
 	private String user;
-	private String productId;
+	private String name;
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse arg1,Object handler) throws Exception{
 		if(request.getRequestURI().endsWith("products/add") && request.getMethod().equals("POST")) {
 			user=request.getRemoteUser();
-			productId=request.getParameterValues("productId")[0];
+			name=request.getParameterValues("name")[0];
 		}
 		return true;
 	}
 	
 	public void afterCompletion(HttpServletRequest request,HttpServletResponse response, Object handler, Exception arg3) throws Exception {
 	      if(request.getRequestURI().endsWith("products/add") && response.getStatus()==302){
-	         logger.info(String.format("Nowy produkt [%s] dodany przez %s dnia %s", productId, user, getCurrentTime()));
+	         logger.info(String.format("Nowy produkt [%s] dodany przez %s dnia %s", name, user, getCurrentTime()));
 	      }
 	}
 	

@@ -23,20 +23,18 @@
 		<a href="#" class="navbar-brand">Rejestracja</a>
 	</security:authorize>
 	<security:authorize access="hasRole('ROLE_ADMIN')">
-	<a href="<spring:url value="/j_spring_security_logout" />"
+		<a href="<spring:url value="/j_spring_security_logout" />"
 			class="navbar-brand">Wyloguj</a>
-		<img
-			src="<c:url value="/resource/images/avatar.jpg"></c:url>"
+		<img src="<c:url value="/resource/images/avatar.jpg"></c:url>"
 			alt="image" class="navbar-brand" style="width: 50px; height: 50px;" />
-			<a class="navbar-brand" style="padding:right;">Admin</a>
+		<a class="navbar-brand" style="padding: right;">Admin</a>
 	</security:authorize>
 	<security:authorize access="hasRole('ROLE_USER')">
 		<a href="<spring:url value="/j_spring_security_logout" />"
 			class="navbar-brand">Wyloguj</a>
-		<img
-			src="<c:url value="/resource/images/avatar.jpg"></c:url>"
+		<img src="<c:url value="/resource/images/avatar.jpg"></c:url>"
 			alt="image" class="navbar-brand" style="width: 50px; height: 50px;" />
-			<a class="navbar-brand" style="padding:right;">User</a>
+		<a class="navbar-brand" style="padding: right;">User</a>
 	</security:authorize>
 
 	<div class="pull-right" style="padding-right: 50px">

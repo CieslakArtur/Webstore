@@ -236,6 +236,6 @@ public class InMemoryProductRepository implements ProductRepository {
 
 	@Override
 	public void addProduct(Product product) {
-		listOfProducts.add(product);
+		
 	}
 }

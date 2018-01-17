@@ -49,13 +49,13 @@ public class DatabaseConnector {
 		return status;
 	}
 	
+	
 	public ResultSet getResultSet() {
 		return rs;
 	}
 
 	public void closeConnection() {
 		try {
-			conn.setAutoCommit(true);
 			conn.close();
 		} catch (SQLException e) {
 			e.printStackTrace();

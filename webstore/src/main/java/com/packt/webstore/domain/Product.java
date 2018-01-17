@@ -1,5 +1,6 @@
 package com.packt.webstore.domain;
 
+import java.beans.Transient;
 import java.math.BigDecimal;
 
 import javax.validation.constraints.Digits;
@@ -35,8 +36,6 @@ public class Product {
 	private String condition;
 	@JsonIgnore
 	private MultipartFile productImage;
-	@JsonIgnore
-	private MultipartFile productDescription;
 
 	public Product() {
 		super();
@@ -124,14 +123,6 @@ public class Product {
 
 	public void setProductImage(MultipartFile productImage) {
 		this.productImage = productImage;
-	}
-	@XmlTransient
-	public MultipartFile getProductDescription() {
-		return productDescription;
-	}
-
-	public void setProductDescription(MultipartFile productDescription) {
-		this.productDescription = productDescription;
 	}
 
 	@Override

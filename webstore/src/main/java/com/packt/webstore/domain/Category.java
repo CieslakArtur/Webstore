@@ -2,12 +2,16 @@ package com.packt.webstore.domain;
 
 import java.util.List;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+import org.springframework.web.multipart.MultipartFile;
+
 public class Category {
 	
 	private String id;
 	private String name;
 	private String description;
-	private List<Product> phones;
+	@JsonIgnore
+	transient private MultipartFile productImage;
 	
 	public Category() {
 		super();

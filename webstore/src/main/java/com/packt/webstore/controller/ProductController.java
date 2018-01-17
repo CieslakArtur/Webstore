@@ -123,23 +123,10 @@ public class ProductController {
 			throw new RuntimeException("Próba wi¹zania niedozwolonych pól: "+StringUtils.arrayToCommaDelimitedString(suppressedFields));
 		}
 		MultipartFile productImage = productToBeAdded.getProductImage();
-		String rootDirectory = request.getSession().getServletContext().getRealPath("/");
 		if (productImage!=null && !productImage.isEmpty()) {
-		   try {
-		      productImage.transferTo(new File(rootDirectory+"resources\\images\\"+productToBeAdded.getProductId() + ".jpg"));
-		   } catch (Exception e) {
-		      throw new RuntimeException("Niepowodzenie podczas próby zapisu obrazka produktu", e);
-		   }
+		   productToBeAdded.setProductImage(productImage);
 		}
 		
-		MultipartFile productDescription = productToBeAdded.getProductDescription();
-		if (productDescription!=null && !productDescription.isEmpty()) {
-		   try {
-		      productDescription.transferTo(new File(rootDirectory+"resources\\pdf\\"+productToBeAdded.getProductId() + ".pdf"));
-		   } catch (Exception e) {
-		      throw new RuntimeException("Niepowodzenie podczas próby zapisu obrazka produktu", e);
-		   }
-		}
 		productService.addProduct(productToBeAdded);
 		return "redirect:/products";
 	}
@@ -152,9 +139,9 @@ public class ProductController {
 	@InitBinder
 	public void initialiseBinder(WebDataBinder binder) {
 		binder.setValidator(productValidator);
-		binder.setDisallowedFields("unitsInOrder","discontinued");
-		binder.setAllowedFields("productId", "name", "unitPrice", "description",
-				"manufacturer", "category", "unitsInStock", "productImage","productDescription","language");
+		binder.setDisallowedFields("unitsInOrder","discontinued","productId");
+		binder.setAllowedFields("name", "unitPrice", "description",
+				"manufacturer", "category", "unitsInStock", "productImage","language","condition");
 	}
 	@ExceptionHandler(ProductNotFoundException.class)
 	public ModelAndView handleError(HttpServletRequest req,ProductNotFoundException exception) {
