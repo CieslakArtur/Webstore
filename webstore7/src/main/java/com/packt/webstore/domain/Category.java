@@ -2,24 +2,11 @@ package com.packt.webstore.domain;
 
 import java.util.List;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
-
-
-@Entity
 public class Category {
 	
-	@Id
-	@GeneratedValue
 	private String id;
 	private String name;
 	private String description;
-	
-	@OneToMany
-	@JoinColumn(name="product")
 	private List<Product> phones;
 	
 	public Category() {

@@ -2,9 +2,6 @@ package com.packt.webstore.domain;
 
 import java.math.BigDecimal;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -18,11 +15,8 @@ import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.web.multipart.MultipartFile;
 
 @XmlRootElement
-@Entity(name="product")
 public class Product {
 	@Pattern(regexp = "P[0-9]+",message="{Pattern.Product.productId.validation}")
-	@Id
-	@GeneratedValue
 	private String productId;
 	@Size(min=4,max=50,message="{Size.Product.name.validation}")
 	private String name;
