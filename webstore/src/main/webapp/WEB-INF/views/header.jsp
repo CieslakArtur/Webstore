@@ -7,12 +7,12 @@
 <link rel="stylesheet"
 	href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
 <script type="text/javascript"
-	src="/webstore7/resource/js/jquery-3.1.1.min.js"></script>
-<script type="text/javascript" src="/webstore7/resource/js/scripts.js"></script>
+	src="/webstore/resource/js/jquery-3.1.1.min.js"></script>
+<script type="text/javascript" src="/webstore/resource/js/scripts.js"></script>
 <script
 	src="http://cdnjs.cloudflare.com/ajax/libs/gsap/1.18.0/TweenMax.min.js"></script>
 <link rel="stylesheet" type="text/css"
-	href="/webstore7/resource/css/styles.css" media="screen" />
+	href="/webstore/resource/css/styles.css" media="screen" />
 
 <div class="navbar navbar-inverse bg-inverse"
 	style="margin-bottom: 0px;">
