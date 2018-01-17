@@ -16,8 +16,6 @@ public class HomeController {
 	@RequestMapping("/")
 	public String welcome(Model model) {
 		model.addAttribute("Home",true);
-		model.addAttribute("manufacturers",getManufacturer());
 		return "welcome";
 	}
-
 }
