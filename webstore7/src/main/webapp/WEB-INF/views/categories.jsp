@@ -31,6 +31,9 @@
 				</div>
 			</div>
 		</c:forEach>
+		<c:forEach items="${manufacturers}" var="manufacturer">
+		<h1>${manufacturer}</h1>
+		</c:forEach>
 	</div>
 </section>
 
