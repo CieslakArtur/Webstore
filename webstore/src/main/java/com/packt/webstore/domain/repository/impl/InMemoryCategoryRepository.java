@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import com.packt.webstore.databse.DatabaseConnector;
 import com.packt.webstore.domain.Category;
+import com.packt.webstore.domain.Manufacturer;
 import com.packt.webstore.domain.repository.CategoryRepository;
 import com.packt.webstore.exception.CategoryNotFoundException;
 
@@ -80,5 +81,30 @@ public class InMemoryCategoryRepository implements CategoryRepository{
 		conn.closeConnection();
 		sb.delete(0, sb.length());
 		return category;
+	}
+
+	@Override
+	public List<Manufacturer> getAllManufacturers() {
+		List<Manufacturer> list=new LinkedList<>();
+		DatabaseConnector conn=new DatabaseConnector();
+		StringBuilder sb=new StringBuilder();
+		sb.append("SELECT * FROM manufacturer");
+		conn.execute(sb.toString());
+		ResultSet rs=conn.getResultSet();
+		if(rs==null) {
+			return list;
+		}
+		Manufacturer manufacturer;
+		try {
+			while(rs.next()){
+				manufacturer=new Manufacturer(Integer.toString(rs.getInt("id")),rs.getString("name"));
+				list.add(manufacturer);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		conn.closeConnection();
+		sb.delete(0, sb.length());
+		return list;
 	}
 }

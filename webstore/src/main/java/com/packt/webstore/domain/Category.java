@@ -11,7 +11,7 @@ public class Category {
 	private String name;
 	private String description;
 	@JsonIgnore
-	transient private MultipartFile productImage;
+	private MultipartFile productImage;
 	
 	public Category() {
 		super();

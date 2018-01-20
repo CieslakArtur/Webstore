@@ -49,6 +49,20 @@ public class DatabaseConnector {
 		return status;
 	}
 	
+	public boolean update(String qry) {
+		boolean status = false;
+		try{
+			p_stat=conn.prepareStatement(qry);
+			p_stat.executeUpdate();
+		}catch(SQLException e){
+			e.printStackTrace();
+		}
+		return status;
+	}
+	
+	public Connection getConnection() {
+		return conn;
+	}
 	
 	public ResultSet getResultSet() {
 		return rs;

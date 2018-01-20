@@ -29,6 +29,7 @@ public class Product {
 	private String manufacturer;
 	@NotEmpty(message="{NotEmpty.Product.category.validation}")
 	private String category;
+	@Digits(integer=8,fraction=0,message="{Int.Product.unitsInStock.validation}")
 	@Min(value=0,message="{Min.Product.unitsInStock.validation}")
 	private long unitsInStock;
 	private long unitsInOrder;

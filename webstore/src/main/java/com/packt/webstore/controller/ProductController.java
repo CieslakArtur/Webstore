@@ -28,6 +28,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.packt.webstore.domain.Category;
+import com.packt.webstore.domain.Manufacturer;
 import com.packt.webstore.domain.Product;
 import com.packt.webstore.exception.NoProductsFoundUnderCategoryException;
 import com.packt.webstore.exception.ProductNotFoundException;
@@ -103,7 +105,10 @@ public class ProductController {
 	@RequestMapping(value="/add",method=RequestMethod.GET)
 	public String getAddNewProductForm(Model model) {
 		Product newProduct=new Product();
+		
 		model.addAttribute("newProduct",newProduct);
+		model.addAttribute("categories",categoryService.getAllCategories());
+		model.addAttribute("manufacturers",categoryService.getAllManufacturers());
 		return "addProduct";
 	}
 	//Zamiennie
@@ -114,8 +119,10 @@ public class ProductController {
 	
 	@RequestMapping(value="/add",method=RequestMethod.POST)
 	public String processAddNewProductForm(@ModelAttribute("newProduct") @Valid Product productToBeAdded,
-												BindingResult result,HttpServletRequest request) {
+												BindingResult result,HttpServletRequest request,Model model) {
 		if(result.hasErrors()) {
+			model.addAttribute("categories",categoryService.getAllCategories());
+			model.addAttribute("manufacturers",categoryService.getAllManufacturers());
 			return "addProduct";
 		}
 		String[] suppressedFields=result.getSuppressedFields();

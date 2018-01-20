@@ -28,6 +28,7 @@
 		<img src="<c:url value="/resource/images/avatar.jpg"></c:url>"
 			alt="image" class="navbar-brand" style="width: 50px; height: 50px;" />
 		<a class="navbar-brand" style="padding: right;">Admin</a>
+		<a href="<spring:url value="/products/add" />" class="navbar-brand">Dodaj produkty</a>
 	</security:authorize>
 	<security:authorize access="hasRole('ROLE_USER')">
 		<a href="<spring:url value="/j_spring_security_logout" />"

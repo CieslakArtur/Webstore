@@ -1,5 +1,11 @@
 package com.packt.webstore.domain.repository.impl;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -9,9 +15,14 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.zip.InflaterInputStream;
 
+import org.apache.commons.fileupload.disk.DiskFileItem;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
+import com.mysql.jdbc.PreparedStatement;
 import com.packt.webstore.databse.DatabaseConnector;
 import com.packt.webstore.domain.Category;
 import com.packt.webstore.domain.Product;
@@ -21,32 +32,6 @@ import com.packt.webstore.exception.ProductNotFoundException;
 @Repository
 public class InMemoryProductRepository implements ProductRepository {
 	private List<Product> listOfProducts = new ArrayList<Product>();
-
-	public InMemoryProductRepository() {
-		Product iphone = new Product("P1234", "iPhone 5s", new BigDecimal(500));
-		iphone.setDescription("Apple iPhone 5s, smartfon z 4-calowym wyœwietlaczem o rozdzielczoœci 640x1136 oraz"
-				+ " 8-megapikselowym aparatem");
-		iphone.setCategory("Cat3");
-		iphone.setManufacturer("Apple");
-		iphone.setUnitsInStock(1000);
-
-		Product laptop_dell = new Product("P1235", "Dell Inspiron", new BigDecimal(700));
-		laptop_dell.setDescription("Dell Inspiron, 14-calowy laptop (czarny)z procesorem Intel Core 3. generacji");
-		laptop_dell.setCategory("Cat1");
-		laptop_dell.setManufacturer("Dell");
-		laptop_dell.setUnitsInStock(1000);
-
-		Product tablet_Nexus = new Product("P1236", "Nexus 7", new BigDecimal(300));
-		tablet_Nexus.setDescription("Google Nexus 7 jest najl¿ejszym 7-calowym tabletem z "
-				+ "4-rdzeniowym procesorem Qualcomm Snapdragon™ S4 Pro");
-		tablet_Nexus.setCategory("Cat2");
-		tablet_Nexus.setManufacturer("Google");
-		tablet_Nexus.setUnitsInStock(1000);
-
-		listOfProducts.add(iphone);
-		listOfProducts.add(laptop_dell);
-		listOfProducts.add(tablet_Nexus);
-	}
 
 	@Override
 	public List<Product> getAllProducts() {
@@ -74,6 +59,8 @@ public class InMemoryProductRepository implements ProductRepository {
 					product.setDiscontinued(false);
 				}
 				product.setCondition(rs.getString("condition"));
+				InputStream inputStream=rs.getBinaryStream("img");
+
 				list.add(product);
 			}
 		} catch (SQLException e) {
@@ -236,6 +223,50 @@ public class InMemoryProductRepository implements ProductRepository {
 
 	@Override
 	public void addProduct(Product product) {
-		
+		boolean status = false;
+		DatabaseConnector conn = new DatabaseConnector();
+		StringBuilder sb = new StringBuilder();
+		sb.append("INSERT INTO product values(default,").append(product.getCategory()).append(",\'")
+				.append(product.getName());
+		sb.append("\',").append(product.getUnitPrice()).append(",\'").append(product.getDescription());
+		sb.append("\',").append(product.getManufacturer()).append(",").append(product.getUnitsInStock())
+				.append(",default");
+		if (product.getCondition().equals("used")) {
+			sb.append(",\'used\'");
+		} else {
+			sb.append(",default");
+		}
+		if (!product.getProductImage().isEmpty()) {
+			// Get bytes
+			// use methods to append new product
+			sb.append(",?)");
+			System.out.println(sb.toString());
+			InputStream inputStream = null;
+			try {
+				PreparedStatement p_stat = (PreparedStatement) conn.getConnection().prepareStatement(sb.toString());
+				inputStream = product.getProductImage().getInputStream();
+				p_stat.setBinaryStream(1, inputStream);
+				//p_stat.executeUpdate();
+			} catch (IOException | SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} finally {
+				conn.closeConnection();
+				if (inputStream != null) {
+					try {
+						inputStream.close();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			}
+		} else {
+			sb.append(",null)");
+			//status = conn.update(sb.toString());
+			conn.closeConnection();
+			System.out.println(sb.toString());
+		}
+		sb.delete(0, sb.length());
 	}
 }

@@ -12,6 +12,9 @@
 	</div>
 </section>
 <section class="container">
+<form:form modelAttribute="categories" class="form-horizontal"
+		enctype="multipart/form-data">
+		</form:form>
 	<form:form modelAttribute="newProduct" class="form-horizontal"
 		enctype="multipart/form-data">
 		<form:errors path="*" cssClass="alert alert-danger" element="div" />
@@ -36,15 +39,21 @@
 			<div class="form-group">
 				<label class="control-label col-lg-2 col-lg-2" for="productId">Marka</label>
 				<div class="col-lg-10">
-					<form:input id="manufacturer" path="manufacturer" type="text"
-						class="form:input-large" />
+					<select id="manufacturer" name="manufacturer" style="max-height: 100px;">
+						<c:forEach items="${manufacturers}" var="manufacturer">
+							<option value="${manufacturer.id}">${manufacturer.name}</option>
+						</c:forEach>
+					</select>
 				</div>
 			</div>
 			<div class="form-group">
 				<label class="control-label col-lg-2 col-lg-2" for="productId">Kategoria</label>
 				<div class="col-lg-10">
-					<form:input id="category" path="category" type="text"
-						class="form:input-large" />
+					<select id="category" name="category" style="max-height: 100px;">
+						<c:forEach items="${categories}" var="category">
+							<option value="${category.id}">${category.name}</option>
+						</c:forEach>
+					</select>
 					<form:errors path="category" cssClass="text-danger" />
 				</div>
 			</div>
@@ -66,7 +75,7 @@
 			<div class="form-group">
 				<label class="control-label col-lg-2" for="condition">Stan</label>
 				<div class="col-lg-10">
-					<form:radiobutton path="condition" value="new" />
+					<form:radiobutton path="condition" value="new" checked="checked"/>
 					Nowy
 					<form:radiobutton path="condition" value="used" />
 					Używany
