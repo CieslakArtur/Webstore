@@ -12,9 +12,6 @@
 	</div>
 </section>
 <section class="container">
-<form:form modelAttribute="categories" class="form-horizontal"
-		enctype="multipart/form-data">
-		</form:form>
 	<form:form modelAttribute="newProduct" class="form-horizontal"
 		enctype="multipart/form-data">
 		<form:errors path="*" cssClass="alert alert-danger" element="div" />

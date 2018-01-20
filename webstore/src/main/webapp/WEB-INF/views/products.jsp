@@ -4,12 +4,12 @@
 <jsp:include page="header.jsp" />
 
 <body>
-	<section >
+	<section>
 		<div class="jumbotron">
 			<div class="container slideY">
 				<h1>${categoryName}
-					<a href="<spring:url value="/categories" />" class="btn btn-default"
-						style="padding: right;"> <span
+					<a href="<spring:url value="/categories" />"
+						class="btn btn-default" style="padding: right;"> <span
 						class="glyphicon-hand-left glyphicon"></span> Powrót
 					</a>
 				</h1>
@@ -23,9 +23,14 @@
 			<c:forEach items="${products}" var="product">
 				<div class="col-sm-6 col-md-3 appeared" style="padding-bottom: 15px">
 					<div class="thumbnail">
-						<img
-							src="<c:url value="/resource/images/products/P${product.productId}.jpg"></c:url>"
-							alt="image" style="width: 100%; max-height: 300px;" />
+						<c:if test="${empty product.base64Image}">
+							<img
+								src="<c:url value="/resource/images/empty.jpg"></c:url>"
+								alt="image" style="width: 100%; max-height: 300px;" />
+						</c:if>
+						<c:if test="${not empty product.base64Image}">
+							<img src="data:image/jpeg;base64,${product.base64Image}" />
+						</c:if>
 						<div class="caption">
 							<h3>${product.name}</h3>
 							<p>${product.description}</p>

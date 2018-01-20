@@ -27,4 +27,12 @@ public class CategoryServiceImpl implements CategoryService{
 		// TODO Auto-generated method stub
 		return categoryRepository.getAllManufacturers();
 	}
+	@Override
+	public void addCategory(Category category) {
+		categoryRepository.addCategory(category);
+	}
+	@Override
+	public void addManufacturer(Manufacturer manufacturer) {
+		categoryRepository.addManufacturer(manufacturer);
+	}
 }

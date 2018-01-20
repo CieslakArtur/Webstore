@@ -9,4 +9,6 @@ public interface CategoryService {
 	List<Category> getAllCategories();
 	Category getCategoryById(String categoryId);
 	List<Manufacturer> getAllManufacturers();
+	void addCategory(Category category);
+	void addManufacturer(Manufacturer manufacturer);
 }

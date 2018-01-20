@@ -18,6 +18,9 @@ public class AuditingInterceptor extends HandlerInterceptorAdapter{
 		if(request.getRequestURI().endsWith("products/add") && request.getMethod().equals("POST")) {
 			user=request.getRemoteUser();
 			name=request.getParameterValues("name")[0];
+		}else if(request.getRequestURI().endsWith("categories/add") && request.getMethod().equals("POST")) {
+			user=request.getRemoteUser();
+			name=request.getParameterValues("name")[0];
 		}
 		return true;
 	}
@@ -25,6 +28,8 @@ public class AuditingInterceptor extends HandlerInterceptorAdapter{
 	public void afterCompletion(HttpServletRequest request,HttpServletResponse response, Object handler, Exception arg3) throws Exception {
 	      if(request.getRequestURI().endsWith("products/add") && response.getStatus()==302){
 	         logger.info(String.format("Nowy produkt [%s] dodany przez %s dnia %s", name, user, getCurrentTime()));
+	      }else if(request.getRequestURI().endsWith("categories/add") && response.getStatus()==302) {
+	    	  logger.info(String.format("Nowa categoria [%s] dodana przez %s dnia %s", name, user, getCurrentTime()));
 	      }
 	}
 	

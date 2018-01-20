@@ -135,7 +135,7 @@ public class ProductController {
 		}
 		
 		productService.addProduct(productToBeAdded);
-		return "redirect:/products";
+		return "redirect:/products/"+productToBeAdded.getCategory();
 	}
 	
 	@RequestMapping("/invalidPromoCode")

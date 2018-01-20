@@ -1,7 +1,10 @@
 package com.packt.webstore.domain;
 
+import javax.validation.constraints.Size;
+
 public class Manufacturer {
 	private String id;
+	@Size(min = 4, max = 50, message = "{Size.Manufacturer.name.validation}")
 	private String name;
 
 	public Manufacturer() {

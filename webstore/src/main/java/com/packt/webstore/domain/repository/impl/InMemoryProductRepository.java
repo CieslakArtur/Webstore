@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -18,6 +19,7 @@ import java.util.Set;
 import java.util.zip.InflaterInputStream;
 
 import org.apache.commons.fileupload.disk.DiskFileItem;
+import org.springframework.security.crypto.codec.Base64;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
@@ -32,6 +34,38 @@ import com.packt.webstore.exception.ProductNotFoundException;
 @Repository
 public class InMemoryProductRepository implements ProductRepository {
 	private List<Product> listOfProducts = new ArrayList<Product>();
+	
+	private Product fillProductFields(ResultSet rs) throws SQLException {
+		Product product = new Product(Integer.toString(rs.getInt("productId")), rs.getString("name"),
+				rs.getBigDecimal("unitPrice"));
+		product.setCategory(Integer.toString(rs.getInt("categoryId")));
+		product.setDescription(rs.getString("description"));
+		product.setManufacturer(Integer.toString(rs.getInt("manufacturerId")));
+		product.setUnitsInStock(rs.getInt("unitsInStock"));
+		if (rs.getString("discontinued").equals("true")) {
+			product.setDiscontinued(true);
+		} else {
+			product.setDiscontinued(false);
+		}
+		product.setCondition(rs.getString("condition"));
+		
+		if(rs.getBytes("img")!=null) {
+			//InputStream inputStream=rs.getBinaryStream("img");
+			System.out.println("Found image for "+product.getName());
+			byte[] encodeBase64 = Base64.encode(rs.getBytes("img"));
+		    try {
+				String base64Encoded = new String(encodeBase64, "UTF-8");
+				product.setBase64Image(base64Encoded);
+				System.out.println("Image set");
+			} catch (UnsupportedEncodingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}else {
+			System.out.println("Not found image for "+product.getName());
+		}
+		return product;
+	}
 
 	@Override
 	public List<Product> getAllProducts() {
@@ -47,21 +81,7 @@ public class InMemoryProductRepository implements ProductRepository {
 		Product product;
 		try {
 			while (rs.next()) {
-				product = new Product(Integer.toString(rs.getInt("productId")), rs.getString("name"),
-						rs.getBigDecimal("unitPrice"));
-				product.setCategory(Integer.toString(rs.getInt("categoryId")));
-				product.setDescription(rs.getString("description"));
-				product.setManufacturer(Integer.toString(rs.getInt("manufacturerId")));
-				product.setUnitsInStock(rs.getInt("unitsInStock"));
-				if (rs.getString("discontinued").equals("true")) {
-					product.setDiscontinued(true);
-				} else {
-					product.setDiscontinued(false);
-				}
-				product.setCondition(rs.getString("condition"));
-				InputStream inputStream=rs.getBinaryStream("img");
-
-				list.add(product);
+				list.add(fillProductFields(rs));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -86,19 +106,8 @@ public class InMemoryProductRepository implements ProductRepository {
 		}
 		try {
 			while (rs.next()) {
-				product = new Product(Integer.toString(rs.getInt("p.productId")), rs.getString("p.name"),
-						rs.getBigDecimal("p.unitPrice"));
-				product.setCategory(Integer.toString(rs.getInt("p.categoryId")));
-				System.out.println(product.getCategory());
-				product.setDescription(rs.getString("p.description"));
+				product=fillProductFields(rs);
 				product.setManufacturer(rs.getString("m.name"));
-				product.setUnitsInStock(rs.getInt("p.unitsInStock"));
-				if (rs.getString("p.discontinued").equals("true")) {
-					product.setDiscontinued(true);
-				} else {
-					product.setDiscontinued(false);
-				}
-				product.setCondition(rs.getString("p.condition"));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -119,22 +128,9 @@ public class InMemoryProductRepository implements ProductRepository {
 		if (rs == null) {
 			return list;
 		}
-		Product product;
 		try {
 			while (rs.next()) {
-				product = new Product(Integer.toString(rs.getInt("productId")), rs.getString("name"),
-						rs.getBigDecimal("unitPrice"));
-				product.setCategory(Integer.toString(rs.getInt("categoryId")));
-				product.setDescription(rs.getString("description"));
-				product.setManufacturer(Integer.toString(rs.getInt("manufacturerId")));
-				product.setUnitsInStock(rs.getInt("unitsInStock"));
-				if (rs.getString("discontinued").equals("true")) {
-					product.setDiscontinued(true);
-				} else {
-					product.setDiscontinued(false);
-				}
-				product.setCondition(rs.getString("condition"));
-				list.add(product);
+				list.add(fillProductFields(rs));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -246,7 +242,7 @@ public class InMemoryProductRepository implements ProductRepository {
 				PreparedStatement p_stat = (PreparedStatement) conn.getConnection().prepareStatement(sb.toString());
 				inputStream = product.getProductImage().getInputStream();
 				p_stat.setBinaryStream(1, inputStream);
-				//p_stat.executeUpdate();
+				p_stat.executeUpdate();
 			} catch (IOException | SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -263,7 +259,7 @@ public class InMemoryProductRepository implements ProductRepository {
 			}
 		} else {
 			sb.append(",null)");
-			//status = conn.update(sb.toString());
+			status = conn.update(sb.toString());
 			conn.closeConnection();
 			System.out.println(sb.toString());
 		}

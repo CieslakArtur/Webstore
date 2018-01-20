@@ -20,9 +20,13 @@
 <section class="container">
 	<div class="row">
 		<div class="col-md-5">
-			<img
-				src="<c:url value="/resource/images/products/P${product.productId}.jpg"></c:url>"
-				alt="image" style="width: 100%" />
+			<c:if test="${empty product.base64Image}">
+				<img src="<c:url value="/resource/images/empty.jpg"></c:url>"
+					alt="image" style="width: 100%; max-height: 300px;" />
+			</c:if>
+			<c:if test="${not empty product.base64Image}">
+				<img src="data:image/jpeg;base64,${product.base64Image}" />
+			</c:if>
 		</div>
 		<div class="col-md-5">
 			<h3>${product.name}</h3>

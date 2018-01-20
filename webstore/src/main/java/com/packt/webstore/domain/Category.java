@@ -2,16 +2,20 @@ package com.packt.webstore.domain;
 
 import java.util.List;
 
+import javax.validation.constraints.Size;
+
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.springframework.web.multipart.MultipartFile;
 
 public class Category {
 	
 	private String id;
+	@Size(min = 4, max = 50, message = "{Size.Category.name.validation}")
 	private String name;
 	private String description;
 	@JsonIgnore
-	private MultipartFile productImage;
+	private MultipartFile categoryImage;
+	String base64Image;
 	
 	public Category() {
 		super();
@@ -40,4 +44,21 @@ public class Category {
 	public void setDescription(String description) {
 		this.description = description;
 	}
+
+	public MultipartFile getCategoryImage() {
+		return categoryImage;
+	}
+
+	public void setCategoryImage(MultipartFile categoryImage) {
+		this.categoryImage = categoryImage;
+	}
+
+	public String getBase64Image() {
+		return base64Image;
+	}
+
+	public void setBase64Image(String base64Image) {
+		this.base64Image = base64Image;
+	}
+	
 }

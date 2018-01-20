@@ -28,7 +28,9 @@
 		<img src="<c:url value="/resource/images/avatar.jpg"></c:url>"
 			alt="image" class="navbar-brand" style="width: 50px; height: 50px;" />
 		<a class="navbar-brand" style="padding: right;">Admin</a>
-		<a href="<spring:url value="/products/add" />" class="navbar-brand">Dodaj produkty</a>
+		<a href="<spring:url value="/products/add" />" class="navbar-brand">Dodaj produkt</a>
+		<a href="<spring:url value="/categories/add" />" class="navbar-brand">Dodaj kategorię</a>
+		<a href="<spring:url value="/categories/manufacturer/add" />" class="navbar-brand">Dodaj wytwórcę</a>
 	</security:authorize>
 	<security:authorize access="hasRole('ROLE_USER')">
 		<a href="<spring:url value="/j_spring_security_logout" />"
@@ -42,10 +44,5 @@
 		<c:if test="${Home!='true'}">
 			<a href="#" class="navbar-brand"><span class="cart" /></span>Cart</a>
 		</c:if>
-
-		<a
-			href="<spring:url value="/products/product?id=${product.productId}" />&language=pl">polski</a>|
-		<a
-			href="<spring:url value="/products/product?id=${product.productId}" />&language=eng">angielski</a>
 	</div>
 </div>
