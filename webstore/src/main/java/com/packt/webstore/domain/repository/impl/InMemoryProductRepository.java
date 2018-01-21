@@ -1,40 +1,22 @@
 package com.packt.webstore.domain.repository.impl;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
-import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.zip.InflaterInputStream;
-
-import org.apache.commons.fileupload.disk.DiskFileItem;
 import org.springframework.security.crypto.codec.Base64;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.commons.CommonsMultipartFile;
-
 import com.mysql.jdbc.PreparedStatement;
 import com.packt.webstore.databse.DatabaseConnector;
-import com.packt.webstore.domain.Category;
 import com.packt.webstore.domain.Product;
 import com.packt.webstore.domain.repository.ProductRepository;
-import com.packt.webstore.exception.ProductNotFoundException;
 
 @Repository
 public class InMemoryProductRepository implements ProductRepository {
-	private List<Product> listOfProducts = new ArrayList<Product>();
-	
+
 	private Product fillProductFields(ResultSet rs) throws SQLException {
 		Product product = new Product(Integer.toString(rs.getInt("productId")), rs.getString("name"),
 				rs.getBigDecimal("unitPrice"));
@@ -48,12 +30,12 @@ public class InMemoryProductRepository implements ProductRepository {
 			product.setDiscontinued(false);
 		}
 		product.setCondition(rs.getString("condition"));
-		
-		if(rs.getBytes("img")!=null) {
-			//InputStream inputStream=rs.getBinaryStream("img");
-			System.out.println("Found image for "+product.getName());
+
+		if (rs.getBytes("img") != null) {
+			// InputStream inputStream=rs.getBinaryStream("img");
+			System.out.println("Found image for " + product.getName());
 			byte[] encodeBase64 = Base64.encode(rs.getBytes("img"));
-		    try {
+			try {
 				String base64Encoded = new String(encodeBase64, "UTF-8");
 				product.setBase64Image(base64Encoded);
 				System.out.println("Image set");
@@ -61,8 +43,8 @@ public class InMemoryProductRepository implements ProductRepository {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		}else {
-			System.out.println("Not found image for "+product.getName());
+		} else {
+			System.out.println("Not found image for " + product.getName());
 		}
 		return product;
 	}
@@ -78,7 +60,6 @@ public class InMemoryProductRepository implements ProductRepository {
 		if (rs == null) {
 			return list;
 		}
-		Product product;
 		try {
 			while (rs.next()) {
 				list.add(fillProductFields(rs));
@@ -92,12 +73,14 @@ public class InMemoryProductRepository implements ProductRepository {
 	}
 
 	@Override
-	public Product getProductById(String productId) {
+	public Product getProductDetails(String productId) {
 		System.out.println("PRODUCT ID=" + productId);
 		DatabaseConnector conn = new DatabaseConnector();
 		StringBuilder sb = new StringBuilder();
-		sb.append("SELECT * FROM product as p LEFT JOIN manufacturer as m ON p.categoryId=m.id");
+		sb.append("SELECT * FROM product as p LEFT JOIN manufacturer as m ON p.manufacturerId=m.id");
+		sb.append(" LEFT JOIN category as c ON p.categoryId=c.id ");
 		sb.append(" WHERE p.productId=").append(productId);
+		System.out.println(sb.toString());
 		conn.execute(sb.toString());
 		ResultSet rs = conn.getResultSet();
 		Product product = null;
@@ -106,8 +89,34 @@ public class InMemoryProductRepository implements ProductRepository {
 		}
 		try {
 			while (rs.next()) {
-				product=fillProductFields(rs);
+				product = fillProductFields(rs);
 				product.setManufacturer(rs.getString("m.name"));
+				product.setCategory(rs.getString("c.name"));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		conn.closeConnection();
+		sb.delete(0, sb.length());
+		return product;
+	}
+
+	@Override
+	public Product getProductById(String productId) {
+		System.out.println("PRODUCT ID=" + productId);
+		DatabaseConnector conn = new DatabaseConnector();
+		StringBuilder sb = new StringBuilder();
+		sb.append("SELECT * FROM product ");
+		sb.append(" WHERE productId=").append(productId);
+		conn.execute(sb.toString());
+		ResultSet rs = conn.getResultSet();
+		Product product = null;
+		if (rs == null) {
+			return product;
+		}
+		try {
+			while (rs.next()) {
+				product = fillProductFields(rs);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -141,85 +150,7 @@ public class InMemoryProductRepository implements ProductRepository {
 	}
 
 	@Override
-	public Set<Product> getProductByFilter(Map<String, List<String>> filterParams) {
-		Set<Product> productByBrand = new HashSet<Product>();
-		Set<Product> productByCategory = new HashSet<Product>();
-		// keySet zwraca zbiór kluczy Mapy (tutaj zbior Stringów)
-		Set<String> criterias = filterParams.keySet();
-		if (criterias.contains("brand")) {
-			for (String brandName : filterParams.get("brand")) {
-				for (Product product : listOfProducts) {
-					if (brandName.equalsIgnoreCase(product.getManufacturer())) {
-						productByBrand.add(product);
-					}
-				}
-			}
-		}
-		if (criterias.contains("category")) {
-			for (String category : filterParams.get("category")) {
-				productByCategory.addAll(this.getProductByCategory(category));
-			}
-		}
-		// Zachowuje tylko te elementy ktore nale¿¹ do kolekcji 'productByBrand'
-		productByCategory.retainAll(productByBrand);
-		return productByCategory;
-	}
-
-	@Override
-	public List<Product> getProductByManufacturer(String manufacturer) {
-		List<Product> productsByManufacturer = new ArrayList<Product>();
-		System.out.println("Maniufaturer: " + manufacturer);
-		for (Product product : listOfProducts) {
-			if (manufacturer.equalsIgnoreCase(product.getManufacturer())) {
-				productsByManufacturer.add(product);
-			}
-		}
-		return productsByManufacturer;
-	}
-
-	@Override
-	public Set<Product> getProductsByPriceFilter(Map<String, List<String>> filterParams) {
-		Set<Product> lowPrice = new HashSet<Product>();
-		Set<Product> highPrice = new HashSet<Product>();
-		Set<String> criterias = filterParams.keySet();
-		if (criterias.contains("low")) {
-			for (String low_price : filterParams.get("low")) {
-				BigDecimal price = new BigDecimal(low_price);
-				System.out.println("Price low=" + price);
-				for (Product product : listOfProducts) {
-					int res = price.compareTo(product.getUnitPrice());
-					if (res <= 0) {
-						lowPrice.add(product);
-						System.out.println("Dodano low: " + lowPrice.size());
-					}
-				}
-			}
-		} else {
-			lowPrice.addAll(listOfProducts);
-		}
-		if (criterias.contains("high")) {
-			for (String high_price : filterParams.get("high")) {
-				BigDecimal price = new BigDecimal(high_price);
-				System.out.println("Price high=" + price);
-				for (Product product : listOfProducts) {
-					int res = price.compareTo(product.getUnitPrice());
-					if (res >= 0) {
-						highPrice.add(product);
-						System.out.println("Dodano high: " + highPrice.size());
-					}
-				}
-			}
-		} else {
-			lowPrice.addAll(listOfProducts);
-		}
-		lowPrice.retainAll(highPrice);
-		System.out.println("AFter retain, lowPrice Size=" + lowPrice.size());
-		return lowPrice;
-	}
-
-	@Override
 	public void addProduct(Product product) {
-		boolean status = false;
 		DatabaseConnector conn = new DatabaseConnector();
 		StringBuilder sb = new StringBuilder();
 		sb.append("INSERT INTO product values(default,").append(product.getCategory()).append(",\'")
@@ -259,10 +190,69 @@ public class InMemoryProductRepository implements ProductRepository {
 			}
 		} else {
 			sb.append(",null)");
-			status = conn.update(sb.toString());
+			conn.update(sb.toString());
 			conn.closeConnection();
 			System.out.println(sb.toString());
 		}
 		sb.delete(0, sb.length());
+	}
+
+	@Override
+	public boolean deleteProduct(String id) {
+		DatabaseConnector conn = new DatabaseConnector();
+		StringBuilder sb = new StringBuilder();
+		sb.append("DELETE FROM product WHERE productId=").append(id);
+		return conn.update(sb.toString());
+	}
+
+	@Override
+	public boolean updateProduct(Product product) {
+		boolean status = false;
+		DatabaseConnector conn = new DatabaseConnector();
+		StringBuilder sb = new StringBuilder();
+		sb.append("UPDATE product ");
+		sb.append("SET categoryId=").append(product.getCategory());
+		sb.append(" ,name=\'").append(product.getName()).append("\'");
+		sb.append(", unitPrice=").append(product.getUnitPrice());
+		sb.append(", description=\'").append(product.getDescription()).append("\'");
+		sb.append(", manufacturerId=").append(product.getManufacturer());
+		sb.append(", unitsInStock=").append(product.getUnitsInStock());
+		sb.append(", `condition`=\'").append(product.getCondition()).append("\'");
+		if (product.getProductImage() != null) {
+			if (!product.getProductImage().isEmpty()) {
+				sb.append(", img=?");
+				sb.append(" WHERE productId=").append(product.getProductId());
+				System.out.println(sb.toString());
+				InputStream inputStream = null;
+				int i = 0;
+				try {
+					PreparedStatement p_stat = (PreparedStatement) conn.getConnection().prepareStatement(sb.toString());
+					inputStream = product.getProductImage().getInputStream();
+					p_stat.setBinaryStream(1, inputStream);
+					i = p_stat.executeUpdate();
+					if (i > 0) {
+						status = true;
+					}
+				} catch (IOException | SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} finally {
+					conn.closeConnection();
+					if (inputStream != null) {
+						try {
+							inputStream.close();
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+				}
+			}
+		} else {
+			sb.append(" WHERE productId=").append(product.getProductId());
+			System.out.println(sb.toString());
+			status = conn.update(sb.toString());
+		}
+		return status;
 	}
 }

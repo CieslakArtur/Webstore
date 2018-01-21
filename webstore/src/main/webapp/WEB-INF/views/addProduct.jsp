@@ -3,10 +3,18 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <jsp:include page="header.jsp" />
+
 <section>
 	<div class="jumbotron">
 		<div class="container">
-			<h1>Produkty</h1>
+			<h1>
+				Produkty <a
+					href="<spring:url value="/categories" />"
+					class="btn btn-default" style="padding: right;"> <span
+					class="glyphicon-hand-left glyphicon"></span> <spring:message
+						code="product.form.productBackButton.label" />
+				</a>
+			</h1>
 			<p>Dodaj produkty</p>
 		</div>
 	</div>
@@ -16,6 +24,7 @@
 		enctype="multipart/form-data">
 		<form:errors path="*" cssClass="alert alert-danger" element="div" />
 		<fieldset>
+			<form:hidden path="productId" />
 			<div class="form-group">
 				<label class="control-label col-lg-2 col-lg-2" for="productId"><spring:message
 						code="addProduct.form.name.label" /></label>
@@ -26,7 +35,7 @@
 				</div>
 			</div>
 			<div class="form-group">
-				<label class="control-label col-lg-2 col-lg-2" for="productId">Cena</label>
+				<label class="control-label col-lg-2 col-lg-2" for="productId">Cena [PLN]</label>
 				<div class="col-lg-10">
 					<form:input id="unitPrice" path="unitPrice" type="text"
 						class="form:input-large" />
@@ -36,9 +45,15 @@
 			<div class="form-group">
 				<label class="control-label col-lg-2 col-lg-2" for="productId">Marka</label>
 				<div class="col-lg-10">
-					<select id="manufacturer" name="manufacturer" style="max-height: 100px;">
+					<select id="manufacturer" name="manufacturer"
+						style="max-height: 100px;">
 						<c:forEach items="${manufacturers}" var="manufacturer">
-							<option value="${manufacturer.id}">${manufacturer.name}</option>
+							<c:if test="${newProduct.manufacturer==manufacturer.id}">
+								<option value="${manufacturer.id}" selected="selected">${manufacturer.name}</option>
+							</c:if>
+							<c:if test="${newProduct.manufacturer!=manufacturer.id}">
+								<option value="${manufacturer.id}">${manufacturer.name}</option>
+							</c:if>
 						</c:forEach>
 					</select>
 				</div>
@@ -48,7 +63,12 @@
 				<div class="col-lg-10">
 					<select id="category" name="category" style="max-height: 100px;">
 						<c:forEach items="${categories}" var="category">
-							<option value="${category.id}">${category.name}</option>
+							<c:if test="${newProduct.category==category.id}">
+								<option value="${category.id}" selected="selected">${category.name}</option>
+							</c:if>
+							<c:if test="${newProduct.category!=category.id}">
+								<option value="${category.id}">${category.name}</option>
+							</c:if>
 						</c:forEach>
 					</select>
 					<form:errors path="category" cssClass="text-danger" />
@@ -64,15 +84,15 @@
 				</div>
 			</div>
 			<div class="form-group">
-				<label class="control-label col-lg-2" for="description">Opis</label>
+				<label class="control-label col-lg-2" for="description" >Opis</label>
 				<div class="col-lg-10">
-					<form:textarea id="description" path="description" rows="2" />
+					<form:textarea id="description" path="description" rows="3" style="min-width: 300px;"/>
 				</div>
 			</div>
 			<div class="form-group">
 				<label class="control-label col-lg-2" for="condition">Stan</label>
 				<div class="col-lg-10">
-					<form:radiobutton path="condition" value="new" checked="checked"/>
+					<form:radiobutton path="condition" value="new" checked="checked" />
 					Nowy
 					<form:radiobutton path="condition" value="used" />
 					Używany

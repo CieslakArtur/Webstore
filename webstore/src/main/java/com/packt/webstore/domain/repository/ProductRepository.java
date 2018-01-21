@@ -9,10 +9,10 @@ import com.packt.webstore.domain.Product;
 public interface ProductRepository {
 	List<Product> getAllProducts();
 	Product getProductById(String productId);
+	Product getProductDetails(String productId);
 	List<Product> getProductByCategory(String category);
-	Set<Product> getProductByFilter(Map<String,List<String>> filterParams);
-	List<Product> getProductByManufacturer(String manufacturer);
-	Set<Product> getProductsByPriceFilter(Map<String,List<String>> filterParams);
 	
 	void addProduct(Product product);
+	boolean deleteProduct(String id);
+	boolean updateProduct(Product product);
 }

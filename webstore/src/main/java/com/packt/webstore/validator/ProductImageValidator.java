@@ -1,7 +1,5 @@
 package com.packt.webstore.validator;
 
-import java.math.BigDecimal;
-
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 

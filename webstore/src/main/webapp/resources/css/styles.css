@@ -117,4 +117,8 @@ position:fixed;
     
 }
 
+.scrollable-description{
+	overflow-y:auto; 
+	height:150px
+}
 

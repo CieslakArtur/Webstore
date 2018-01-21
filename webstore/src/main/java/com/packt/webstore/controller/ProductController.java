@@ -1,12 +1,6 @@
 package com.packt.webstore.controller;
 
-import java.io.File;
-
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
@@ -19,7 +13,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.MatrixVariable;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,9 +21,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.packt.webstore.domain.Category;
-import com.packt.webstore.domain.Manufacturer;
 import com.packt.webstore.domain.Product;
+import com.packt.webstore.exception.DeleteException;
 import com.packt.webstore.exception.NoProductsFoundUnderCategoryException;
 import com.packt.webstore.exception.ProductNotFoundException;
 import com.packt.webstore.service.CategoryService;
@@ -68,38 +60,14 @@ public class ProductController {
 		}
 		model.addAttribute("products",products);
 		model.addAttribute("categoryName",categoryName);
-		return "products";
-	}
-	
-	@RequestMapping("/filter/{ByCriteria}")
-	public String getProductsByFilter(@MatrixVariable(pathVar="ByCriteria") Map<String,List<String>> filterParams,Model model) {
-		model.addAttribute("products",productService.getProductsByFilter(filterParams));
+		model.addAttribute("categoryId",categoryId);
 		return "products";
 	}
 	
 	@RequestMapping("/product")
 	public String getProductById(@RequestParam("id") String productId, Model model) {
-		model.addAttribute("product",productService.getProductById(productId));
+		model.addAttribute("product",productService.getProductDetails(productId));
 		return "product";
-	}
-	
-	@RequestMapping("/{category}/{price}")
-	public String filterProducts(@MatrixVariable(pathVar="price") Map<String,List<String>> price,@PathVariable("category") String category,
-									@RequestParam("manufacturer") String manufacturer,Model model) {
-		Set<Product> productByManufacturer=new HashSet<Product>();
-		productByManufacturer.addAll(productService.getProductByManufacturer(manufacturer));
-		System.out.println("productByManufacturer size="+productByManufacturer.size());
-		Set<Product> productByCategory=new HashSet<Product>();
-		productByCategory.addAll(productService.getProductsByCategory(category));
-		System.out.println("productByCategory size="+productByCategory.size());
-		Set<Product> productByPrice=productService.getProductsByPriceFilter(price);
-		System.out.println("productByPriceFIlter size="+productByPrice.size());
-		productByCategory.retainAll(productByManufacturer);
-		productByCategory.retainAll(productByPrice);
-		System.out.println("productByCategory after retain size="+productByCategory.size());
-		model.addAttribute("products",productByCategory);
-		System.out.println("filter");
-		return "products";
 	}
 	
 	@RequestMapping(value="/add",method=RequestMethod.GET)
@@ -111,12 +79,7 @@ public class ProductController {
 		model.addAttribute("manufacturers",categoryService.getAllManufacturers());
 		return "addProduct";
 	}
-	//Zamiennie
-	/*@RequestMapping(value="/add",method=RequestMethod.GET)
-	public String getAddNewProductForm(@ModelAttribute("newProduct") Product product) {
-		return "addProduct";
-	}*/
-	
+
 	@RequestMapping(value="/add",method=RequestMethod.POST)
 	public String processAddNewProductForm(@ModelAttribute("newProduct") @Valid Product productToBeAdded,
 												BindingResult result,HttpServletRequest request,Model model) {
@@ -138,17 +101,61 @@ public class ProductController {
 		return "redirect:/products/"+productToBeAdded.getCategory();
 	}
 	
-	@RequestMapping("/invalidPromoCode")
-	public String invalidPromoCOde() {
-		return "invalidPromoCode";
+	@RequestMapping(value="/edit",method=RequestMethod.GET)
+	public String getEditProductForm(@RequestParam("product") String id,Model model) {
+		Product editedProduct=productService.getProductById(id);
+		model.addAttribute("categories",categoryService.getAllCategories());
+		model.addAttribute("manufacturers",categoryService.getAllManufacturers());
+		System.out.println("PRODUCT ID UPDATE: "+editedProduct.getProductId());
+		System.out.println("PRODUCT ID UPDATE: "+editedProduct.getCategory());
+		System.out.println("PRODUCT ID UPDATE: "+editedProduct.getManufacturer());
+		model.addAttribute("newProduct",editedProduct);
+		return "addProduct";
+	}
+	
+	@RequestMapping(value="/edit",method=RequestMethod.POST)
+	public String processEditProductForm(@ModelAttribute("newProduct") @Valid Product editedProduct,
+												BindingResult result,HttpServletRequest request,Model model) {
+		if(result.hasErrors()) {
+			model.addAttribute("categories",categoryService.getAllCategories());
+			model.addAttribute("manufacturers",categoryService.getAllManufacturers());
+			return "addProduct";
+		}
+		
+		MultipartFile productImage = editedProduct.getProductImage();
+		if (productImage!=null && !productImage.isEmpty()) {
+			editedProduct.setProductImage(productImage);
+		}
+		
+		System.out.println("PRODUCT ID UPDATE post: "+editedProduct.getProductId());
+		System.out.println("PRODUCT ID UPDATE post: "+editedProduct.getCategory());
+		System.out.println("PRODUCT ID UPDATE post: "+editedProduct.getManufacturer());
+		if(!productService.updateProduct(editedProduct)) {
+			StringBuilder sb=new StringBuilder();
+			sb.append("Nie mo¿na edytowaæ produktu o identyfikatorze: ").append(editedProduct.getProductId());
+			throw new DeleteException(editedProduct.getProductId(),sb.toString(),"/products/"+editedProduct.getCategory());
+		}
+		
+		return "redirect:/products/"+editedProduct.getCategory();
+	}
+	
+	@RequestMapping(value="/delete")
+	public String deleteCategory(@RequestParam("product") String id,@RequestParam("category") String categoryId) {
+		System.out.println("DELETE PRODUCT "+id);
+		if(!productService.deleteProduct(id)) {
+			StringBuilder sb=new StringBuilder();
+			sb.append("Nie mo¿na usun¹æ produktu o identyfikatorze: ").append(id);
+			throw new DeleteException(id,sb.toString(),"/products/"+categoryId);
+		}
+		return "redirect:/products/"+categoryId;
 	}
 	
 	@InitBinder
 	public void initialiseBinder(WebDataBinder binder) {
 		binder.setValidator(productValidator);
-		binder.setDisallowedFields("unitsInOrder","discontinued","productId");
+		binder.setDisallowedFields("unitsInOrder","discontinued");
 		binder.setAllowedFields("name", "unitPrice", "description",
-				"manufacturer", "category", "unitsInStock", "productImage","language","condition");
+				"manufacturer", "category", "unitsInStock", "productImage","language","condition","productId");
 	}
 	@ExceptionHandler(ProductNotFoundException.class)
 	public ModelAndView handleError(HttpServletRequest req,ProductNotFoundException exception) {
@@ -171,6 +178,19 @@ public class ProductController {
 		mav.addObject("returnURL","/categories");
 		mav.addObject("url",req.getRequestURL()+"?"+req.getQueryString());
 		mav.setViewName("productNotFound");
+		return mav;
+	}
+	
+	@ExceptionHandler(DeleteException.class)
+	public ModelAndView handleError(HttpServletRequest req,DeleteException exception) {
+		ModelAndView mav=new ModelAndView();
+		
+		mav.addObject("description",exception.getDescription());
+		mav.addObject("exception",exception);
+		mav.addObject("btnName","Wytwórcy");
+		mav.addObject("returnURL",exception.getReturnURL());
+		mav.addObject("url",req.getRequestURL()+"?"+req.getQueryString());
+		mav.setViewName("deleteException");
 		return mav;
 	}
 }

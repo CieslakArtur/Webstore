@@ -35,4 +35,16 @@ public class CategoryServiceImpl implements CategoryService{
 	public void addManufacturer(Manufacturer manufacturer) {
 		categoryRepository.addManufacturer(manufacturer);
 	}
+	@Override
+	public boolean deleteCategory(String id) {
+		return categoryRepository.deleteCategory(id);	
+	}
+	@Override
+	public boolean deleteManufacturer(String id) {
+		return categoryRepository.deleteManufacturer(id);	
+	}
+	@Override
+	public boolean updateCategory(Category category) {
+		return categoryRepository.updateCategory(category);
+	}
 }

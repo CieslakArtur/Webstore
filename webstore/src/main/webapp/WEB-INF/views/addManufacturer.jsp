@@ -43,7 +43,10 @@
 	<div class="row">
 		<c:forEach items="${manufacturers}" var="manufacturer">
 			<div class="col-sm-6 col-md-3 appeared" style="padding-bottom: 15px">
-				<div class="thumbnail">${manufacturer.name}</div>
+				<div class="thumbnail" style="height: 45px;">${manufacturer.name}<a href="<spring:url value="/categories/manufacturer/delete?manufacturer=${manufacturer.id}" />"
+					class="btn btn-danger" style="padding: right; float: right;">Usuń
+				</a></div>
+				
 			</div>
 		</c:forEach>
 	</div>

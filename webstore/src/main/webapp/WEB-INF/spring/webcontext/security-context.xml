@@ -11,8 +11,13 @@
 
     <security:http auto-config="true">
         <security:intercept-url pattern="/products/add" access="ROLE_ADMIN" />
+        <security:intercept-url pattern="/products/delete" access="ROLE_ADMIN" />
         <security:intercept-url pattern="/categories/add" access="ROLE_ADMIN" />
-        <security:intercept-url pattern="/categories/manufacturer/add" access="ROLE_ADMIN" />
+        <security:intercept-url pattern="/categories/delete" access="ROLE_ADMIN" />
+        <security:intercept-url pattern="/categories/edit" access="ROLE_ADMIN" />
+        <security:intercept-url pattern="/categories/manufacturer/" access="ROLE_ADMIN" />
+        <security:intercept-url pattern="/orders" access="ROLE_ADMIN, ROLE_USER" />
+
 	<!-- login page- strona do wyswietlenia jesli uztkownik nie ma uprawnien
 	default target- strona ktora ma sie wyswietlic po pomyslnym zalogowaniu
 	autentication failurw- strona gdy logowanie sie nie powiedzie -->
@@ -28,6 +33,7 @@
             <security:user-service>
                 <security:user name="Admin" password="Admin123" authorities="ROLE_ADMIN" />
                 <security:user name="User" password="User123" authorities="ROLE_USER" />
+                <security:user name="User2" password="User2123" authorities="ROLE_USER" />
             </security:user-service>
         </security:authentication-provider>
     </security:authentication-manager>

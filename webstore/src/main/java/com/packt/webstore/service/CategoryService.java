@@ -11,4 +11,7 @@ public interface CategoryService {
 	List<Manufacturer> getAllManufacturers();
 	void addCategory(Category category);
 	void addManufacturer(Manufacturer manufacturer);
+	boolean deleteCategory(String id);
+	boolean deleteManufacturer(String id);
+	boolean updateCategory(Category category);
 }

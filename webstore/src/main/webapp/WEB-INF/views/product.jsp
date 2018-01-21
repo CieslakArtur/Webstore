@@ -7,7 +7,7 @@
 	<div class="jumbotron">
 		<div class="container slideY">
 			<h1>${product.name}
-				<a href="<spring:url value="/products/${product.category}" />"
+				<a href="<spring:url value="/categories" />"
 					class="btn btn-default" style="padding: right;"> <span
 					class="glyphicon-hand-left glyphicon"></span> <spring:message
 						code="product.form.productBackButton.label" />
@@ -22,10 +22,11 @@
 		<div class="col-md-5">
 			<c:if test="${empty product.base64Image}">
 				<img src="<c:url value="/resource/images/empty.jpg"></c:url>"
-					alt="image" style="width: 100%; max-height: 300px;" />
+					alt="image" style="max-width: 300px; max-height: 300px;" />
 			</c:if>
 			<c:if test="${not empty product.base64Image}">
-				<img src="data:image/jpeg;base64,${product.base64Image}" />
+				<img src="data:image/jpeg;base64,${product.base64Image}" 
+				alt="image" style="max-width: 300px; max-height: 300px;"/>
 			</c:if>
 		</div>
 		<div class="col-md-5">
@@ -52,10 +53,10 @@
 					code="product.form.productCurrency.label" />
 			</h4>
 			<p>
-				<a href="#" class="btn btn-warning btn-large"> <span
+				<a href="<spring:url value="/orders/add?id=${product.productId}" />" class="btn btn-warning btn-large"> <span
 					class="glyphicon-shopping-cart glyphicon"></span> <spring:message
 						code="product.form.productOrderButton.label" />
-				</a>
+				</a> 
 			</p>
 		</div>
 	</div>

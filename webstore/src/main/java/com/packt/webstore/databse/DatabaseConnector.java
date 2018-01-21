@@ -51,11 +51,22 @@ public class DatabaseConnector {
 	
 	public boolean update(String qry) {
 		boolean status = false;
+		int i=0;
 		try{
 			p_stat=conn.prepareStatement(qry);
-			p_stat.executeUpdate();
+			i=p_stat.executeUpdate();
 		}catch(SQLException e){
 			e.printStackTrace();
+		}finally {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		if(i>0) {
+			status=true;
 		}
 		return status;
 	}

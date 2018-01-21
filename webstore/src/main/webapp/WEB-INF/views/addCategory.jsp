@@ -6,7 +6,14 @@
 <section>
 	<div class="jumbotron">
 		<div class="container">
-			<h1>Kategoria</h1>
+			<h1>
+				Kategoria <a
+					href="<spring:url value="/categories" />"
+					class="btn btn-default" style="padding: right;"> <span
+					class="glyphicon-hand-left glyphicon"></span> <spring:message
+						code="product.form.productBackButton.label" />
+				</a>
+			</h1>
 			<p>Dodaj kategorię</p>
 		</div>
 	</div>
@@ -15,6 +22,8 @@
 	<form:form modelAttribute="newCategory" class="form-horizontal"
 		enctype="multipart/form-data">
 		<form:errors path="*" cssClass="alert alert-danger" element="div" />
+
+		<form:hidden path="id" />
 		<fieldset>
 			<div class="form-group">
 				<label class="control-label col-lg-2 col-lg-2" for="id"><spring:message
@@ -26,10 +35,10 @@
 				</div>
 			</div>
 			<div class="form-group">
-				<label class="control-label col-lg-2" for="description"><spring:message
+				<label class="control-label col-lg-2" for="description" ><spring:message
 						code="addCategory.form.categoryDescription.label" /></label>
 				<div class="col-lg-10">
-					<form:textarea id="description" path="description" rows="2" />
+					<form:textarea id="description" path="description" rows="3" style="min-width: 300px;"/>
 				</div>
 			</div>
 			<div class="form-group">

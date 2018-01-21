@@ -5,7 +5,6 @@ import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -17,12 +16,9 @@ import com.packt.webstore.databse.DatabaseConnector;
 import com.packt.webstore.domain.Category;
 import com.packt.webstore.domain.Manufacturer;
 import com.packt.webstore.domain.repository.CategoryRepository;
-import com.packt.webstore.exception.CategoryNotFoundException;
 
 @Repository
 public class InMemoryCategoryRepository implements CategoryRepository {
-	private List<Category> listOfCategories = new ArrayList<>();
-
 	private Category fillCategoryFields(ResultSet rs) throws SQLException {
 		Category category = new Category(Integer.toString(rs.getInt("id")), rs.getString("name"));
 		category.setDescription(rs.getString("description"));
@@ -54,7 +50,6 @@ public class InMemoryCategoryRepository implements CategoryRepository {
 		if (rs == null) {
 			return list;
 		}
-		Category category;
 		try {
 			while (rs.next()) {
 				list.add(fillCategoryFields(rs));
@@ -117,7 +112,6 @@ public class InMemoryCategoryRepository implements CategoryRepository {
 
 	@Override
 	public void addCategory(Category category) {
-		boolean status = false;
 		DatabaseConnector conn = new DatabaseConnector();
 		StringBuilder sb = new StringBuilder();
 		sb.append("INSERT INTO category values(default,\'").append(category.getName());
@@ -147,7 +141,7 @@ public class InMemoryCategoryRepository implements CategoryRepository {
 			}
 		} else {
 			sb.append(",null)");
-			status = conn.update(sb.toString());
+			conn.update(sb.toString());
 			conn.closeConnection();
 			System.out.println(sb.toString());
 		}
@@ -155,13 +149,71 @@ public class InMemoryCategoryRepository implements CategoryRepository {
 
 	@Override
 	public void addManufacturer(Manufacturer manufacturer) {
-		// TODO Auto-generated method stub
-		boolean status = false;
 		DatabaseConnector conn = new DatabaseConnector();
 		StringBuilder sb = new StringBuilder();
 		sb.append("INSERT INTO manufacturer values(default,\'").append(manufacturer.getName()).append("\')");
-		status = conn.update(sb.toString());
+		conn.update(sb.toString());
 		conn.closeConnection();
 		System.out.println(sb.toString());
+	}
+
+	@Override
+	public boolean deleteCategory(String id) {
+		DatabaseConnector conn = new DatabaseConnector();
+		StringBuilder sb = new StringBuilder();
+		sb.append("DELETE FROM category WHERE id=").append(id);
+		return conn.update(sb.toString());
+	}
+
+	@Override
+	public boolean deleteManufacturer(String id) {
+		DatabaseConnector conn = new DatabaseConnector();
+		StringBuilder sb = new StringBuilder();
+		sb.append("DELETE FROM manufacturer WHERE id=").append(id);
+		return conn.update(sb.toString());
+	}
+
+	@Override
+	public boolean updateCategory(Category category) {
+		boolean status=false;
+		DatabaseConnector conn = new DatabaseConnector();
+		StringBuilder sb = new StringBuilder();
+		sb.append("UPDATE category ");
+		sb.append("SET name=\'").append(category.getName()).append("\'");
+		sb.append(", description=\'").append(category.getDescription()).append("\'");
+		if(!category.getCategoryImage().isEmpty()) {
+			sb.append(", img=?");
+			sb.append(" WHERE id=").append(category.getId());
+			System.out.println(sb.toString());
+			InputStream inputStream = null;
+			int i=0;
+			try {
+				PreparedStatement p_stat = (PreparedStatement) conn.getConnection().prepareStatement(sb.toString());
+				inputStream = category.getCategoryImage().getInputStream();
+				p_stat.setBinaryStream(1, inputStream);
+				i=p_stat.executeUpdate();
+				if(i>0) {
+					status=true;
+				}
+			} catch (IOException | SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} finally {
+				conn.closeConnection();
+				if (inputStream != null) {
+					try {
+						inputStream.close();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			}
+		}else {
+			sb.append(" WHERE id=").append(category.getId());
+			System.out.println(sb.toString());
+			status=conn.update(sb.toString());
+		}
+		return status;
 	}
 }
