@@ -1,7 +1,5 @@
 package com.packt.webstore.domain;
 
-import java.util.List;
-
 import javax.validation.constraints.Size;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
