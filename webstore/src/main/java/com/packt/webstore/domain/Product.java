@@ -72,7 +72,8 @@ public class Product {
 	}
 
 	public void setDescription(String description) {
-		this.description = description;
+		
+		this.description = description.replace('\'', ' ');
 	}
 
 	public String getDescription() {

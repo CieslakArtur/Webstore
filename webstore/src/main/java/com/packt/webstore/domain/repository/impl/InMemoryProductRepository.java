@@ -210,6 +210,7 @@ public class InMemoryProductRepository implements ProductRepository {
 		boolean status = false;
 		DatabaseConnector conn = new DatabaseConnector();
 		StringBuilder sb = new StringBuilder();
+		System.out.println("Update-1");
 		sb.append("UPDATE product ");
 		sb.append("SET categoryId=").append(product.getCategory());
 		sb.append(" ,name=\'").append(product.getName()).append("\'");
@@ -218,33 +219,39 @@ public class InMemoryProductRepository implements ProductRepository {
 		sb.append(", manufacturerId=").append(product.getManufacturer());
 		sb.append(", unitsInStock=").append(product.getUnitsInStock());
 		sb.append(", `condition`=\'").append(product.getCondition()).append("\'");
-		if (product.getProductImage() != null) {
-			if (!product.getProductImage().isEmpty()) {
-				sb.append(", img=?");
-				sb.append(" WHERE productId=").append(product.getProductId());
-				System.out.println(sb.toString());
-				InputStream inputStream = null;
-				int i = 0;
-				try {
-					PreparedStatement p_stat = (PreparedStatement) conn.getConnection().prepareStatement(sb.toString());
-					inputStream = product.getProductImage().getInputStream();
-					p_stat.setBinaryStream(1, inputStream);
-					i = p_stat.executeUpdate();
-					if (i > 0) {
-						status = true;
-					}
-				} catch (IOException | SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} finally {
-					conn.closeConnection();
-					if (inputStream != null) {
-						try {
-							inputStream.close();
-						} catch (IOException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
+		
+		if(product.getProductImage()==null) {
+			sb.append(" WHERE productId=").append(product.getProductId());
+			System.out.println(sb.toString());
+			status = conn.update(sb.toString());
+			return status;
+		}
+
+		if (!product.getProductImage().isEmpty()) {
+			sb.append(", img=?");
+			sb.append(" WHERE productId=").append(product.getProductId());
+			System.out.println(sb.toString());
+			InputStream inputStream = null;
+			int i = 0;
+			try {
+				PreparedStatement p_stat = (PreparedStatement) conn.getConnection().prepareStatement(sb.toString());
+				inputStream = product.getProductImage().getInputStream();
+				p_stat.setBinaryStream(1, inputStream);
+				i = p_stat.executeUpdate();
+				if (i > 0) {
+					status = true;
+				}
+			} catch (IOException | SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} finally {
+				conn.closeConnection();
+				if (inputStream != null) {
+					try {
+						inputStream.close();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
 					}
 				}
 			}
