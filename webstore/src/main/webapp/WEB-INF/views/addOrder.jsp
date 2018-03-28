@@ -4,7 +4,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <jsp:include page="header.jsp" />
 <section>
-	<div class="jumbotron">
+	<div class="jumbotron animated_bg_product">
 		<div class="container slideY">
 			<h1>
 				Zamówienie <a href="<spring:url value="/products/product?id=${product.productId}" />"

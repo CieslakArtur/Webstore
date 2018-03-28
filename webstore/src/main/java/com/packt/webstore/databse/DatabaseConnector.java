@@ -13,10 +13,18 @@ public class DatabaseConnector {
 	private static final String database = "webstore";
 	private static final String user = "root";
 	private static final String password = "password";
+	
+	/*private static final String host = "webstore.ccgyil0rctxx.eu-west-1.rds.amazonaws.com";
+	private static final String port = "3306";
+	private static final String database = "webstore";
+	private static final String user = "administrator";
+	private static final String password = "password";*/
+	
+	
 
 	public static final String DRIVER = "com.mysql.jdbc.Driver";
 	public static final String DB_URL = "jdbc:mysql://" + host + ":" + port + "/" + database
-			+ "?autoReconnect=true&useSSL=false";
+			+ "?autoReconnect=true&useSSL=false&useUnicode=true&characterEncoding=utf8";
 
 	private Connection conn = null;
 	private PreparedStatement p_stat = null;

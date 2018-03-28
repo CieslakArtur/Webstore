@@ -3,23 +3,21 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <jsp:include page="header.jsp" />
 <body>
-	<c:if test="${!error}">
-		<section class="slideY">
-	</c:if>
-	<c:if test="${error}">
-		<section>
-	</c:if>
-	<div class="jumbotron">
-		<div class="container">
-			<h1>Logowanie</h1>
-			<p>Jeżeli nie posiadasz konta, zarejestruj się</p>
-		</div>
+	<div class="jumbotron animated_bg_category">
+		<c:if test="${!error}">
+			<div class="container slideY">
+		</c:if>
+		<c:if test="${error}">
+			<div class="container">
+		</c:if>
+		<h1>Logowanie</h1>
+		<p>Jeżeli nie posiadasz konta, zarejestruj się</p>
 	</div>
-	</section>
+	</div>
 	<div class="container">
 		<div class="row">
 			<c:if test="${!error}">
-				<div class="col-md-4 col-md-offset-4 appeared" >
+				<div class="col-md-4 col-md-offset-4 appeared">
 			</c:if>
 			<c:if test="${error}">
 				<div class="col-md-4 col-md-offset-4">
@@ -48,8 +46,8 @@
 									name='j_password' type="password" value="">
 							</div>
 							<input class="btn btn-lg btn-success btn-block" type="submit"
-								value="Zaloguj się"> 
-								<a href=" <spring:url value="/categories" /> "
+								value="Zaloguj się"> <a
+								href=" <spring:url value="/categories" /> "
 								class="btn btn-lg btn-warning btn-block"> <span
 								class="glyphicon-hand-left glyphicon" /></span> Powrót do sklepu
 							</a>

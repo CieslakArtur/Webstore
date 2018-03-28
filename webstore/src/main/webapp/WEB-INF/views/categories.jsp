@@ -5,16 +5,12 @@
 	uri="http://www.springframework.org/security/tags"%>
 <jsp:include page="header.jsp" />
 <body>
-
-
-	<section class="slideY">
-		<div class="jumbotron">
-			<div class="container">
+		<div class="jumbotron animated_bg_category" >
+			<div class="container slideY">
 				<h1>Kategorie</h1>
 				<p>Wszystkie kategorie</p>
 			</div>
 		</div>
-	</section>
 	<section class="container">
 		<c:forEach items="${categories}" var="category" varStatus="status"
 			step="1" begin="0">
@@ -56,7 +52,8 @@
 			</c:if>
 		</c:forEach>
 	</section>
-
 </body>
+
 <jsp:include page="footer.jsp" />
+
 

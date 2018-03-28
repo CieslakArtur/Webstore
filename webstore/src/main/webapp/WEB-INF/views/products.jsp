@@ -6,7 +6,7 @@
 
 <body>
 	<section>
-		<div class="jumbotron">
+		<div class="jumbotron animated_bg_product">
 			<div class="container slideY">
 				<h1>${categoryName}
 					<a href="<spring:url value="/categories" />"

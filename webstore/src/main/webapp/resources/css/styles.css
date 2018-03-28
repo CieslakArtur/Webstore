@@ -122,3 +122,38 @@ position:fixed;
 	height:150px
 }
 
+
+ @-webkit-keyframes bgcolor {
+ 	0%{background-position:100% 25%}
+    50%{background-position:0% 75%}
+    100%{background-position:100% 25%}
+}
+@-moz-keyframes bgcolor {
+    0%{background-position:100% 25%}
+    50%{background-position:0% 75%}
+    100%{background-position:100% 25%}
+}
+@keyframes bgcolor {
+  	0%{background-position:100% 25%}
+    50%{background-position:0% 75%}
+    100%{background-position:100% 25%}
+}
+
+.animated_bg_category {
+     background: linear-gradient(270deg, #e4eeeb, #92a19d);
+     background-size: 200% 200%;
+
+	-webkit-animation: bgcolor 10s ease infinite;
+	-moz-animation: bgcolor 10s ease infinite;
+	animation: bgcolor 10s ease infinite;
+}
+
+.animated_bg_product {
+     background: linear-gradient(270deg, #eee4e4, #a19294);
+     background-size: 200% 200%;
+
+	-webkit-animation: bgcolor 10s ease infinite;
+	-moz-animation: bgcolor 10s ease infinite;
+	animation: bgcolor 10s ease infinite;
+}
+

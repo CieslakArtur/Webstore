@@ -4,7 +4,7 @@
 <jsp:include page="header.jsp" />
 
 <section>
-	<div class="jumbotron">
+	<div class="jumbotron animated_bg_category">
 		<div class="container slideY">
 			<h1>${user}
 				<a href="<spring:url value="/categories" />" class="btn btn-default"

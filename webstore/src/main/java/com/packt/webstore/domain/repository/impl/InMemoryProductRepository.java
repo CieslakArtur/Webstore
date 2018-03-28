@@ -153,6 +153,7 @@ public class InMemoryProductRepository implements ProductRepository {
 	public void addProduct(Product product) {
 		DatabaseConnector conn = new DatabaseConnector();
 		StringBuilder sb = new StringBuilder();
+		
 		sb.append("INSERT INTO product values(default,").append(product.getCategory()).append(",\'")
 				.append(product.getName());
 		sb.append("\',").append(product.getUnitPrice()).append(",\'").append(product.getDescription());
@@ -211,6 +212,7 @@ public class InMemoryProductRepository implements ProductRepository {
 		DatabaseConnector conn = new DatabaseConnector();
 		StringBuilder sb = new StringBuilder();
 		System.out.println("Update-1");
+		System.out.println("Produkt: "+product.getName());
 		sb.append("UPDATE product ");
 		sb.append("SET categoryId=").append(product.getCategory());
 		sb.append(" ,name=\'").append(product.getName()).append("\'");

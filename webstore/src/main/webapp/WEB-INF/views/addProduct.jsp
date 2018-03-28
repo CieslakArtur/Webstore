@@ -5,8 +5,8 @@
 <jsp:include page="header.jsp" />
 
 <section>
-	<div class="jumbotron">
-		<div class="container">
+	<div class="jumbotron animated_bg_product">
+		<div class="container slideY">
 			<h1>
 				Produkty <a
 					href="<spring:url value="/categories" />"
@@ -19,7 +19,7 @@
 		</div>
 	</div>
 </section>
-<section class="container">
+<section class="container appeared">
 	<form:form modelAttribute="newProduct" class="form-horizontal"
 		enctype="multipart/form-data">
 		<form:errors path="*" cssClass="alert alert-danger" element="div" />

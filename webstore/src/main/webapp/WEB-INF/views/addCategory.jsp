@@ -4,8 +4,8 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <jsp:include page="header.jsp" />
 <section>
-	<div class="jumbotron">
-		<div class="container">
+	<div class="jumbotron animated_bg_category">
+		<div class="container slideY">
 			<h1>
 				Kategoria <a
 					href="<spring:url value="/categories" />"
@@ -18,7 +18,7 @@
 		</div>
 	</div>
 </section>
-<section class="container">
+<section class="container appeared">
 	<form:form modelAttribute="newCategory" class="form-horizontal"
 		enctype="multipart/form-data">
 		<form:errors path="*" cssClass="alert alert-danger" element="div" />

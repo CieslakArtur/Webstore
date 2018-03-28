@@ -4,8 +4,8 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <jsp:include page="header.jsp" />
 <section>
-	<div class="jumbotron">
-		<div class="container">
+	<div class="jumbotron animated_bg_category">
+		<div class="container slideY">
 			<h1>
 				Wytwórca
 				<a href="<spring:url value="/categories" />"
