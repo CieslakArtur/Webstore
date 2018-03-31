@@ -110,7 +110,7 @@
 					<div class="alert alert-success">
 						Strona posiada animowany <a target="_blank"
 							href="<spring:url value="/" />" class="alert-link">widok
-							powiatalny</a> wykonany z zastosowaniem skryptów JS po stronie
+							powitalny</a> wykonany z zastosowaniem skryptów JS po stronie
 						użytkownika. Wszystkie informacje o zakupach i ofertach sklepu
 						przechowywane są w relacyjnej bazie danych mySQL.
 					</div>
