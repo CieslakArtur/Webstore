@@ -1,17 +1,18 @@
+<!DOCTYPE html>
 <%@page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="security" uri="http://www.springframework.org/security/tags"%>
+<title>Produkty</title>
 <jsp:include page="header.jsp" />
-
 <body>
 	<section>
 		<div class="jumbotron animated_bg_product">
 			<div class="container slideY">
 				<h1>${categoryName}
 					<a href="<spring:url value="/categories" />"
-						class="btn btn-default" style="padding: right;"> <span
-						class="glyphicon-hand-left glyphicon"></span> Powrót
+						class="btn btn-default" ><span
+						class="glyphicon-hand-left glyphicon"></span>Powrót
 					</a>
 				</h1>
 				<p>Wszystkie produkty dostępne w naszym sklepie</p>
@@ -30,11 +31,11 @@
 				<div class="thumbnail">
 					<c:if test="${empty product.base64Image}">
 						<img src="<c:url value="/resource/images/empty.jpg"></c:url>"
-							alt="image" style="width: 100%; height: 200px;" />
+							alt="Empty product image" style="width: 100%; height: 200px;" />
 					</c:if>
 					<c:if test="${not empty product.base64Image}">
 						<img src="data:image/jpeg;base64,${product.base64Image}" 
-						alt="image" style="width: width: 100%; height: 200px;"/>
+						alt="Product image" style="width: 100%; height: 200px;"/>
 					</c:if>
 					<div class="caption">
 						<h3>${product.name}</h3>
@@ -43,17 +44,17 @@
 						<p>Liczba sztuk w magazynie:${product.unitsInStock}</p>
 						<p>
 							<a
-								href=" <spring:url value="/products/product?id=${product.productId}" /> "
+								href="<spring:url value="/products/product?id=${product.productId}" />"
 								class="btn btn-primary"> <span
 								class="glyphicon-info-sign glyphicon" /></span> Szczegóły
 							</a> 
 							<security:authorize access="hasRole('ROLE_ADMIN')">
 							<a href="<spring:url value="/products/delete?product=${product.productId}&&category=${categoryId}" />"
-								class="btn btn-danger" style="padding: right; float: right;">Usuń
+								class="btn btn-danger" style="float: right;">Usuń
 							</a>
 							<a
 								href="<spring:url value="/products/edit?product=${product.productId}" />"
-								class="btn btn-primary" style="padding: right; float: right;">Edytuj
+								class="btn btn-primary" style="float: right;">Edytuj
 							</a>
 							</security:authorize>
 						</p>

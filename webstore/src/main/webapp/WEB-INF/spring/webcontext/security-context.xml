@@ -13,6 +13,7 @@
         <security:intercept-url pattern="/products/add" access="ROLE_ADMIN" />
         <security:intercept-url pattern="/products/delete" access="ROLE_ADMIN" />
         <security:intercept-url pattern="/categories/add" access="ROLE_ADMIN" />
+        <security:intercept-url pattern="/description" access="ROLE_ADMIN" />
         <security:intercept-url pattern="/categories/delete" access="ROLE_ADMIN" />
         <security:intercept-url pattern="/categories/edit" access="ROLE_ADMIN" />
         <security:intercept-url pattern="/categories/manufacturer/*" access="ROLE_ADMIN" />

@@ -1,6 +1,8 @@
+<!DOCTYPE html>
 <%@page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<title>Logowanie</title>
 <jsp:include page="header.jsp" />
 <body>
 	<div class="jumbotron animated_bg_category">
@@ -47,7 +49,7 @@
 							</div>
 							<input class="btn btn-lg btn-success btn-block" type="submit"
 								value="Zaloguj się"> <a
-								href=" <spring:url value="/categories" /> "
+								href="<spring:url value="/categories" />"
 								class="btn btn-lg btn-warning btn-block"> <span
 								class="glyphicon-hand-left glyphicon" /></span> Powrót do sklepu
 							</a>

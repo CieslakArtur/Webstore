@@ -8,7 +8,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class DatabaseConnector {
-	private static final String host = "localhost";
+	 static final String host = "localhost";
 	private static final String port = "3306";
 	private static final String database = "webstore";
 	private static final String user = "root";

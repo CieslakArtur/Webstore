@@ -1,7 +1,9 @@
+<!DOCTYPE html>
 <%@page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<title>Dodaj wytworce</title>
 <jsp:include page="header.jsp" />
 <section>
 	<div class="jumbotron animated_bg_category">
@@ -9,7 +11,7 @@
 			<h1>
 				Wytwórca
 				<a href="<spring:url value="/categories" />"
-					class="btn btn-default" style="padding: right;"> <span
+					class="btn btn-default"> <span
 					class="glyphicon-hand-left glyphicon"></span> <spring:message
 						code="product.form.productBackButton.label" />
 				</a>
@@ -44,7 +46,7 @@
 		<c:forEach items="${manufacturers}" var="manufacturer">
 			<div class="col-sm-6 col-md-3 appeared" style="padding-bottom: 15px">
 				<div class="thumbnail" style="height: 45px;">${manufacturer.name}<a href="<spring:url value="/categories/manufacturer/delete?manufacturer=${manufacturer.id}" />"
-					class="btn btn-danger" style="padding: right; float: right;">Usuń
+					class="btn btn-danger" style="float: right;">Usuń
 				</a></div>
 				
 			</div>

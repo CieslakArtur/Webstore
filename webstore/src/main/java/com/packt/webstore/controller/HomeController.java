@@ -11,4 +11,9 @@ public class HomeController {
 		model.addAttribute("Home",true);
 		return "welcome";
 	}
+	
+	@RequestMapping("/description")
+	public String description() {
+		return "description";
+	}
 }

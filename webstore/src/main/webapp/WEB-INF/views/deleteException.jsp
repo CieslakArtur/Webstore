@@ -1,14 +1,16 @@
+<!DOCTYPE html>
 <%@page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<title>Usuwanie - wyjatek</title>
 <jsp:include page="header.jsp" />
       <section>
          <div class="jumbotron">
             <div class="container">
             <img
 							src="<c:url value="/resource/images/deleteError.jpg"></c:url>"
-							alt="image" style="width: 150px; height=150px;" />  
-							<h1 class="alert alert-danger" style="padding:right"> ${description}</h1> 
+							alt="Delete error logo" style="width: 150px; height=150px;" />  
+							<h1 class="alert alert-danger"> ${description}</h1> 
             </div>
          </div>
       </section>

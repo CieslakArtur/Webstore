@@ -1,14 +1,15 @@
+<!DOCTYPE html>
 <%@page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<title>Produkt</title>
 <jsp:include page="header.jsp" />
-
 <section>
 	<div class="jumbotron animated_bg_product">
 		<div class="container slideY">
 			<h1>${product.name}
 				<a href="<spring:url value="/categories" />"
-					class="btn btn-default" style="padding: right;"> <span
+					class="btn btn-default"> <span
 					class="glyphicon-hand-left glyphicon"></span> <spring:message
 						code="product.form.productBackButton.label" />
 				</a>
@@ -22,11 +23,11 @@
 		<div class="col-md-5">
 			<c:if test="${empty product.base64Image}">
 				<img src="<c:url value="/resource/images/empty.jpg"></c:url>"
-					alt="image" style="max-width: 300px; max-height: 300px;" />
+					alt="Empty product image" style="max-width: 300px; max-height: 300px;" />
 			</c:if>
 			<c:if test="${not empty product.base64Image}">
 				<img src="data:image/jpeg;base64,${product.base64Image}" 
-				alt="image" style="max-width: 300px; max-height: 300px;"/>
+				alt="Product image" style="max-width: 300px; max-height: 300px;"/>
 			</c:if>
 		</div>
 		<div class="col-md-5">
