@@ -8,18 +8,17 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class DatabaseConnector {
-	 static final String host = "localhost";
+	/*static final String host = "localhost";
 	private static final String port = "3306";
 	private static final String database = "webstore";
 	private static final String user = "root";
-	private static final String password = "password";
+	private static final String password = "password";*/
 	
-	/*private static final String host = "webstore.ccgyil0rctxx.eu-west-1.rds.amazonaws.com";
+	private static final String host = "webstore.ccgyil0rctxx.eu-west-1.rds.amazonaws.com";
 	private static final String port = "3306";
 	private static final String database = "webstore";
 	private static final String user = "administrator";
-	private static final String password = "password";*/
-	
+	private static final String password = "password";
 	
 
 	public static final String DRIVER = "com.mysql.jdbc.Driver";

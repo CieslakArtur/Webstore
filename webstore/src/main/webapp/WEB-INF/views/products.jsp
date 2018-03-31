@@ -1,11 +1,16 @@
 <!DOCTYPE html>
+<html lang="pl-PL">
 <%@page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="security" uri="http://www.springframework.org/security/tags"%>
+<head>
 <title>Produkty</title>
-<jsp:include page="header.jsp" />
+<jsp:include page="headerIncludes.jsp" />
+</head>
 <body>
+<jsp:include page="header.jsp" />
+
 	<section>
 		<div class="jumbotron animated_bg_product">
 			<div class="container slideY">
@@ -67,5 +72,5 @@
 		</c:forEach>
 
 	</section>
-</body>
 <jsp:include page="footer.jsp" />
+</body>

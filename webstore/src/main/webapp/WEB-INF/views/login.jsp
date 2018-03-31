@@ -1,10 +1,15 @@
 <!DOCTYPE html>
+<html lang="pl-PL">
 <%@page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<head>
 <title>Logowanie</title>
-<jsp:include page="header.jsp" />
+<jsp:include page="headerIncludes.jsp" />
+</head>
 <body>
+<jsp:include page="header.jsp" />
+
 	<div class="jumbotron animated_bg_category">
 		<c:if test="${!error}">
 			<div class="container slideY">
@@ -16,6 +21,7 @@
 		<p>Jeżeli nie posiadasz konta, zarejestruj się</p>
 	</div>
 	</div>
+	
 	<div class="container">
 		<div class="row">
 			<c:if test="${!error}">
@@ -24,6 +30,7 @@
 			<c:if test="${error}">
 				<div class="col-md-4 col-md-offset-4">
 			</c:if>
+			
 			<div class="panel panel-default">
 				<div class="panel-heading">
 					<h3 class="panel-title">Zaloguj się</h3>
@@ -36,6 +43,7 @@
 							<br />
 						</div>
 					</c:if>
+					
 					<form action="<c:url value="/j_spring_security_check"></c:url>"
 						method="post">
 						<fieldset>
@@ -51,13 +59,14 @@
 								value="Zaloguj się"> <a
 								href="<spring:url value="/categories" />"
 								class="btn btn-lg btn-warning btn-block"> <span
-								class="glyphicon-hand-left glyphicon" /></span> Powrót do sklepu
+								class="glyphicon-hand-left glyphicon"></span> Powrót do sklepu
 							</a>
 						</fieldset>
 					</form>
+					
+				</div>
 				</div>
 			</div>
 		</div>
-	</div>
 	</div>
 </body>

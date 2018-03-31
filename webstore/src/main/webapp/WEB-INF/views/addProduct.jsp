@@ -1,9 +1,14 @@
 <!DOCTYPE html>
+<html lang="pl-PL">
 <%@page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<head>
 <title>Dodaj produkt</title>
+<jsp:include page="headerIncludes.jsp" />
+</head>
+<body>
 <jsp:include page="header.jsp" />
 <section>
 	<div class="jumbotron animated_bg_product">
@@ -119,4 +124,4 @@
 	</form:form>
 </section>
 <jsp:include page="footer.jsp" />
-
+</body>
