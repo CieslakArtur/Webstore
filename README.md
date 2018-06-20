@@ -30,10 +30,10 @@ Users with accounts can order products and view their orders, while the other us
 
   <hr>
 <p align="center" style="display:block;">
-  <i>Login form</i>
+  <img src="https://preview.ibb.co/hnacN8/3.jpg"/>
 </p>
 <p align="center" style="display:block;">
-  <img src="https://preview.ibb.co/hnacN8/3.jpg"/>
+  <i>Login form</i>
 </p>
 
   <hr>
