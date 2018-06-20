@@ -33,7 +33,7 @@ Users with accounts can order products and view history of orders. The others ca
   <img src="https://preview.ibb.co/eLaNpo/9.jpg"/>
 </p>
 <p align="center" style="display:block;">
-  <i>all products of a given category</i>
+  <i>All products of a given category</i>
 </p>
 
   <hr>
