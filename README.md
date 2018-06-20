@@ -1,7 +1,7 @@
 # Webstore
 <p align="left" style="display:block;">
 Simple web store simulation. Web store allows to add, delete and monitor all purchases by the administrator.<br>
-Users with accounts can order products and view their orders, while the other users can freely browse the offer of the online store.<br><br>
+Users with accounts can order products and view history of orders. The others can freely browse the web store offer.<br><br>
 <b>Tools and technologies</b><br>
      &#8226 Java 1.8<br>
      &#8226 Spring MVC 3.1.4<br>
