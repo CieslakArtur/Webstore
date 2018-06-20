@@ -30,6 +30,14 @@ Users with accounts can order products and view history of orders. The others ca
 
   <hr>
 <p align="center" style="display:block;">
+  <img src="https://preview.ibb.co/eLaNpo/9.jpg"/>
+</p>
+<p align="center" style="display:block;">
+  <i>all products of a given category</i>
+</p>
+
+  <hr>
+<p align="center" style="display:block;">
   <img src="https://preview.ibb.co/hnacN8/3.jpg"/>
 </p>
 <p align="center" style="display:block;">
@@ -38,7 +46,7 @@ Users with accounts can order products and view history of orders. The others ca
 
   <hr>
 <p align="center" style="display:block;">
-  <img src="https://preview.ibb.co/ed0GFT/4.jpg"/>
+  <img src="https://preview.ibb.co/j4Khpo/10.jpg"/>
 </p>
 <p align="center" style="display:block;">
   <i><b>'New category'</b> admin page</i>
